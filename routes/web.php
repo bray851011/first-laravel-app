@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
+use function PHPUnit\Framework\fileExists;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,8 +15,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/post', function () {
-    return view('post');
+Route::get('/post/{post}', function ($slug) {
+
+    $path = __DIR__. "/../resources/posts/{$slug}.html";
+
+    if(! fileExists($path)){
+        dd($path);
+        //ddd();
+        //abort(404);
+        //return redirect('/');
+    }
+
+    $post = file_get_contents($path);
+
+    return view('post', [
+        'post' => $post // extracted to post
+    ]);
 });
 
 

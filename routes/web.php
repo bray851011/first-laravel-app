@@ -26,12 +26,16 @@ Route::get('/post/{post}', function ($slug) {
         //return redirect('/');
     }
 
-    $post = file_get_contents($path);
+    // caching 
+    $post = cache() -> remember("post.{$slug}", now() -> addMinutes(5), fn() =>  file_get_contents($path));
 
     return view('post', [
         'post' => $post // extracted to post
     ]);
-});
+}) -> where('post','[A-z_\-]+'); // adding constraints to the path
+// -> whereAlpha();
+// -> whereNumber();
+
 
 
 

@@ -6,7 +6,7 @@
 <body>
 
     <article>
-            <?= $post; ?>
+            <?= $post ; ?>
     </article>
 
     <a href="/">Go back</a>

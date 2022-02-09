@@ -1,8 +1,7 @@
 <?php
 
+use App\Models\Post;
 use Illuminate\Support\Facades\Route;
-
-use function PHPUnit\Framework\fileExists;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,28 +16,20 @@ use function PHPUnit\Framework\fileExists;
 
 Route::get('/post/{post}', function ($slug) {
 
-    $path = __DIR__. "/../resources/posts/{$slug}.html";
-
-    if(! fileExists($path)){
-        dd($path);
-        //ddd();
-        //abort(404);
-        //return redirect('/');
-    }
-
-    // caching 
-    $post = cache() -> remember("post.{$slug}", now() -> addMinutes(5), fn() =>  file_get_contents($path));
-
+    $post = Post::find($slug);
+  
+    // Find a post by its slug and pass it to a view called "post"
     return view('post', [
-        'post' => $post // extracted to post
+        'post' => $post
     ]);
+
 }) -> where('post','[A-z_\-]+'); // adding constraints to the path
 // -> whereAlpha();
 // -> whereNumber();
 
 
-
-
 Route::get('/', function () {
-    return view('welcome');
+    return view('welcome', [
+        'posts' => Post::all()
+    ]);
 });

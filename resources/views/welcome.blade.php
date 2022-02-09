@@ -1,14 +1,19 @@
-<!DOCTYPE html>
+@extends('layout')
 
-<title>My Blog</title>
-<link rel="stylesheet" href="/css/app.css">
+@section('content')
 
-<body>
-
-        <?php foreach ($posts as $post) :?>
+        @foreach ($posts as $post)
                 <article>
-                        <?= $post; ?>
-                </article>
-        <?php endforeach; ?>
+                        <h1>
+                                <a href="post/<?= $post->slug; ?>">     
+                                        {{ $post->title }}
+                                </a>
+                        </h1>
 
-</body>
+                        <div>
+                                {!! $post->body !!}
+                        </div>
+                </article>
+        @endforeach
+
+@endsection

@@ -1,7 +1,9 @@
 <?php
 
 use App\Models\Post;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
+use Spatie\YamlFrontMatter\YamlFrontMatter;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,13 +16,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+Route::get('/', function () {
+
+    return view('welcome', [
+        'posts' => Post::all()
+    ]);
+});
+
+
+
 Route::get('/post/{post}', function ($slug) {
 
-    $post = Post::find($slug);
-  
     // Find a post by its slug and pass it to a view called "post"
     return view('post', [
-        'post' => $post
+        'post' => Post::findOrFail($slug)
     ]);
 
 }) -> where('post','[A-z_\-]+'); // adding constraints to the path
@@ -28,8 +38,4 @@ Route::get('/post/{post}', function ($slug) {
 // -> whereNumber();
 
 
-Route::get('/', function () {
-    return view('welcome', [
-        'posts' => Post::all()
-    ]);
-});
+
